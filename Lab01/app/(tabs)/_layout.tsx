@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { Tabs, useRouter, useSegments } from "expo-router";
-import { Image, StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, View, Text, TouchableOpacity, StatusBar } from "react-native";
 import { useTheme } from "@react-navigation/native";
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 // @ts-ignore
 import ztuLogo from "@/assets/images/ztuLogo.png";
@@ -54,106 +55,118 @@ export default function TabLayout() {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Image style={styles.ztuImg} source={ztuLogo} resizeMode="contain" />
-                <Text style={styles.title}>FirstMobileApp</Text>
+        <SafeAreaProvider>
+            {/* Main container with black background to match footer */}
+            <View style={[styles.outerContainer, { backgroundColor: theme.dark ? "#000000" : "#000000" }]}>
+                <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+                    <StatusBar barStyle="light-content" backgroundColor="#000000" />
+
+                    <View style={styles.header}>
+                        <Image style={styles.ztuImg} source={ztuLogo} resizeMode="contain" />
+                        <Text style={styles.title}>FirstMobileApp</Text>
+                    </View>
+
+                    <View style={[styles.tabBarContainer, dynamicStyles.tabBarContainer]}>
+                        <TouchableOpacity
+                            style={styles.tabItem}
+                            onPress={() => navigateToTab("index")}
+                        >
+                            <Image
+                                source={homeIcon}
+                                style={[
+                                    styles.tabIcon,
+                                    dynamicStyles.tabIcon,
+                                    activeTab === "index" && dynamicStyles.activeTabIcon
+                                ]}
+                            />
+                            <Text
+                                style={[
+                                    styles.tabBarLabel,
+                                    dynamicStyles.tabBarLabel,
+                                    activeTab === "index" && dynamicStyles.activeTabLabel
+                                ]}
+                            >
+                                Home
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.tabItem}
+                            onPress={() => navigateToTab("gallery")}
+                        >
+                            <Image
+                                source={galleryIcon}
+                                style={[
+                                    styles.tabIcon,
+                                    dynamicStyles.tabIcon,
+                                    activeTab === "gallery" && dynamicStyles.activeTabIcon
+                                ]}
+                            />
+                            <Text
+                                style={[
+                                    styles.tabBarLabel,
+                                    dynamicStyles.tabBarLabel,
+                                    activeTab === "gallery" && dynamicStyles.activeTabLabel
+                                ]}
+                            >
+                                Gallery
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.tabItem}
+                            onPress={() => navigateToTab("profile")}
+                        >
+                            <Image
+                                source={profileIcon}
+                                style={[
+                                    styles.tabIcon,
+                                    dynamicStyles.tabIcon,
+                                    activeTab === "profile" && dynamicStyles.activeTabIcon
+                                ]}
+                            />
+                            <Text
+                                style={[
+                                    styles.tabBarLabel,
+                                    dynamicStyles.tabBarLabel,
+                                    activeTab === "profile" && dynamicStyles.activeTabLabel
+                                ]}
+                            >
+                                Profile
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.tabsContainer}>
+                        <Tabs
+                            screenOptions={{
+                                headerShown: false,
+                                tabBarStyle: { display: "none" },
+                            }}
+                        >
+                            <Tabs.Screen name="index" />
+                            <Tabs.Screen name="gallery" />
+                            <Tabs.Screen name="profile" />
+                        </Tabs>
+                    </View>
+
+                    <View style={[styles.footer, dynamicStyles.footer]}>
+                        <Text style={[styles.footerText, dynamicStyles.footerText]}>
+                            Риженко Ян Віталійович, ІПЗ-23-1
+                        </Text>
+                    </View>
+                </SafeAreaView>
+                {/* Bottom safe area with matching background */}
+                <SafeAreaView style={[styles.bottomSafeArea, dynamicStyles.footer]} edges={['bottom']} />
             </View>
-
-            <View style={[styles.tabBarContainer, dynamicStyles.tabBarContainer]}>
-                <TouchableOpacity
-                    style={styles.tabItem}
-                    onPress={() => navigateToTab("index")}
-                >
-                    <Image
-                        source={homeIcon}
-                        style={[
-                            styles.tabIcon,
-                            dynamicStyles.tabIcon,
-                            activeTab === "index" && dynamicStyles.activeTabIcon
-                        ]}
-                    />
-                    <Text
-                        style={[
-                            styles.tabBarLabel,
-                            dynamicStyles.tabBarLabel,
-                            activeTab === "index" && dynamicStyles.activeTabLabel
-                        ]}
-                    >
-                        Home
-                    </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.tabItem}
-                    onPress={() => navigateToTab("gallery")}
-                >
-                    <Image
-                        source={galleryIcon}
-                        style={[
-                            styles.tabIcon,
-                            dynamicStyles.tabIcon,
-                            activeTab === "gallery" && dynamicStyles.activeTabIcon
-                        ]}
-                    />
-                    <Text
-                        style={[
-                            styles.tabBarLabel,
-                            dynamicStyles.tabBarLabel,
-                            activeTab === "gallery" && dynamicStyles.activeTabLabel
-                        ]}
-                    >
-                        Gallery
-                    </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.tabItem}
-                    onPress={() => navigateToTab("profile")}
-                >
-                    <Image
-                        source={profileIcon}
-                        style={[
-                            styles.tabIcon,
-                            dynamicStyles.tabIcon,
-                            activeTab === "profile" && dynamicStyles.activeTabIcon
-                        ]}
-                    />
-                    <Text
-                        style={[
-                            styles.tabBarLabel,
-                            dynamicStyles.tabBarLabel,
-                            activeTab === "profile" && dynamicStyles.activeTabLabel
-                        ]}
-                    >
-                        Profile
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.tabsContainer}>
-                <Tabs
-                    screenOptions={{
-                        headerShown: false,
-                        tabBarStyle: { display: "none" },
-                    }}
-                >
-                    <Tabs.Screen name="index" />
-                    <Tabs.Screen name="gallery" />
-                    <Tabs.Screen name="profile" />
-                </Tabs>
-            </View>
-
-            <View style={[styles.footer, dynamicStyles.footer]}>
-                <Text style={[styles.footerText, dynamicStyles.footerText]}>
-                    Риженко Ян Віталійович, ІПЗ-23-1
-                </Text>
-            </View>
-        </View>
+        </SafeAreaProvider>
     );
 }
 
 const styles = StyleSheet.create({
+    outerContainer: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         backgroundColor: "white",
@@ -163,7 +176,7 @@ const styles = StyleSheet.create({
         width: "100%",
         alignItems: "center",
         paddingHorizontal: 15,
-        paddingTop: 40,
+        paddingTop: 10,
         paddingBottom: 10,
         backgroundColor: "white",
     },
@@ -216,5 +229,7 @@ const styles = StyleSheet.create({
         width: "100%",
         textAlign: "center",
         fontSize: 12,
+    },
+    bottomSafeArea: {
     },
 });
